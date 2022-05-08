@@ -56,6 +56,33 @@ meowRouter.get('/:id', (req, res, next) => {
     });
 });
 
+meowRouter.get('/:id/edit', (req, res, next) => {
+  const { id } = req.params;
+  Publication.findById(id)
+    .populate('creator')
+    .then((publication) => {
+      res.render('meow-edit', { publication });
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
+meowRouter.post(
+  '/:id/edit',
+  routeGuard,
+  fileUpload.single('picture'),
+  (req, res, next) => {
+    const { id } = req.params;
+    const { message } = req.body;
+    let picture;
+    if (req.file) {
+      picture = req.file.path;
+    }
+    Publication.findByIdAndUpdate(picture);
+  }
+);
+
 meowRouter.post('/:id/delete', (req, res, next) => {
   const { id } = req.params;
   Publication.findByIdAndRemove(id)

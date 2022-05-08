@@ -13,6 +13,28 @@ const bindUserToViewLocals = require('./middleware/bind-user-to-view-locals.js')
 const baseRouter = require('./routes/base');
 const authenticationRouter = require('./routes/authentication');
 const meowRouter = require('./routes/meow');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD
+  }
+});
+
+transporter
+  .sendMail({
+    to: '',
+    subject: 'Welcome to Meower!',
+    html: 'Hi! Thank you for signing up to Meower! 😊'
+  })
+  .then(() => {
+    console.log('Email sent successfully');
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 const app = express();
 
